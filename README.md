@@ -1,5 +1,5 @@
 # XMRig-Proxy-Frontend
-Simple Mobile HTML Frontend for XMRig-proxy based on [Framework7] (https://github.com/framework7io/framework7)
+Simple Mobile HTML Frontend for XMRig-proxy based on [Framework7](https://github.com/framework7io/framework7)
 It shows all the important informations and allow change pool and settings with xmrig-proxy API.
 Compatible with Ios, Android, Desktop
 
