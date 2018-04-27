@@ -3,6 +3,7 @@ Simple Mobile HTML Frontend for XMRig-proxy based on [Framework7](https://github
 It shows all the important informations and allow change pool and settings with xmrig-proxy API.
 Compatible with Ios, Android, Desktop
 
+<img src="https://raw.githubusercontent.com/pcca-matrix/XMRig-Proxy-Frontend/master/xmrig-proxy/img/demo.png" width="200">
 
 ## Installation
 You must have apache webserver with php 5.x or 7.x with extension sqlite3 and curl enabled.
