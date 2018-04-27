@@ -1,0 +1,113 @@
+<div class="page" data-name="settings">
+  <div class="navbar">
+	<div class="navbar-inner">
+		<div class="left">
+			<a href="index.html" class="back link" data-force="false"><i class="icon icon-back"></i></a>
+		</div>
+	  <div class="title">XMRig-Proxy Settings</div>
+	</div>
+  </div>
+  <div class="page-content">
+	
+	<div id="proxy-form-settings" class="list inline-labels no-hairlines-md">
+	  <ul>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Algo</div>
+			<div class="item-input-wrap">
+			  <select placeholder="Please choose..." name="algo">
+				<option value="cryptonight">Cryptonight</option>
+				<option value="cryptonight-lite">Cryptonight-lite</option>
+			  </select>
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Background</div>
+			<div class="item-input-wrap">
+			  <select placeholder="Please choose..." name="background">
+				<option value="true">True</option>
+				<option value="false">False</option>
+			  </select>
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Colors</div>
+			<div class="item-input-wrap">
+			  <select placeholder="Please choose..." name="colors">
+				<option value="true">True</option>
+				<option value="false">False</option>
+			  </select>
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Custom Diff</div>
+			<div class="item-input-wrap">
+			  <input type="number" name="custom-diff" placeholder="Difficulty" validate pattern="[0-9]*" data-error-message="Only numbers please!">
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Donate Level</div>
+			<div class="item-input-wrap">
+			  <input type="number" name="donate-level" placeholder="Level in %" validate pattern="[0-9]*" data-error-message="Only numbers please!">
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Mode</div>
+			<div class="item-input-wrap">
+			  <select placeholder="Please choose..." name="mode">
+				<option value="nicehash">Nicehash</option>
+				<option value="simple">Simple</option>
+			  </select>
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Retries</div>
+			<div class="item-input-wrap">
+			  <input type="number" name="retries" placeholder="Numbers of retries" validate pattern="[0-9]*" data-error-message="Only numbers please!">
+			</div>
+		  </div>
+		</li>	
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Retry Pause</div>
+			<div class="item-input-wrap">
+			  <input type="number" name="retry-pause" placeholder="Pause in Seconds" validate pattern="[0-9]*" data-error-message="Only numbers please!">
+			</div>
+		  </div>
+		</li>
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">User Agent</div>
+			<div class="item-input-wrap">
+			  <input type="text" name="user_agent">
+			</div>
+		  </div>
+		</li>	
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Verbose</div>
+			<div class="item-input-wrap">
+			  <select placeholder="Please choose..." name="verbose">
+				<option value="true">True</option>
+				<option value="false">False</option>
+			  </select>
+			</div>
+		  </div>
+		</li>	
+	  </ul>
+	</div>
+	<div id="submit" style="display:none"><a class="button" id="submit-settings">Submit</a></div>
+  </div>
+</div>

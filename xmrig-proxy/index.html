@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#2196f3">
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap:">
+  <title>XMRig-Proxy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/framework7/2.2.1/css/framework7.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="apple-touch-icon" href="img/icon.png">
+  <link rel="icon" href="img/icon.png">
+</head>
+<body class="theme-dark">
+  <div id="app">
+   <div class="panel panel-left panel-cover">
+      <div class="page">
+        <div class="page-content">
+          <div class="block-title">Menu</div>
+			<div class="list links-list">
+			  <ul>
+				<li><a href="/workers/" class="panel-close">Workers</a></li>
+				<li><a href="/settings/" class="panel-close">Settings</a></li>
+				<li><a href="/ch_pool/" class="panel-close">Change Pool</a></li>
+			  </ul>
+			</div>
+        </div>
+      </div>
+    </div>
+	
+  	<div class="view view-main">
+	 <div data-name="home" class="page">
+          <div class="navbar">
+            <div class="navbar-inner">
+		    <div class="left">
+              <a href="#" class="link icon-only panel-open" data-panel="left">
+                <i class="icon f7-icons ios-only">menu</i>
+                <i class="icon material-icons md-only">menu</i>
+              </a>
+            </div>
+              <div class="title">XMRig-Proxy Remote</div>
+            </div>
+          </div>
+		  <div class="page-content">		
+			<div class="card data-table">
+				<div class="card-header">
+					<div class="data-table-title">Proxy Stats</div>
+				</div>
+				<div class="content-block">
+					<div id="proxy_hashrate"></div>
+					<div id="daysdiv" style="margin-top:5px;margin-bottom:15px;"> H/R History for  
+						<i class="icon icon-back" id="mindays" style="margin:0px 10px 0px 15px;padding:4px"></i> 	    
+						<span id="numdays">1</span>
+						<i class="icon icon-forward" id="maxdays" style="margin:0px 15px 0px 10px;padding:4px"></i> 
+						days
+					</div>
+				</div>
+				<table style="font-size:10px">
+				  <thead>
+				  <tr>
+					<td>1 M</td>
+					<td>10 M</td>
+					<td>1 H</td>
+					<td>12 H</td>
+					<td>24 H</td>
+				  </tr>
+				  </thead>
+				  <tbody>
+				   <tr id="hashrate">
+				   </tr>
+				  </tbody>
+				  </table>
+				  
+				  <table>
+				   <tbody>
+				   <thead>
+					<tr>
+						<td class="label-cell" id="proxy_infos"></td>
+					</tr>
+					</thead>
+					<tr>
+					  <td class="label-cell">Act. Pool</td>
+					  <td class="numeric-cell" id="act_pool"></td>
+					</tr>					
+					<tr>
+					  <td class="label-cell">Uptime</td>
+					  <td class="numeric-cell" id="uptime"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Workers</td>
+					  <td class="numeric-cell" id="workers"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Total Hashes</td>
+					  <td class="numeric-cell" id="tothash"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Avg. Hashrate</td>
+					  <td class="numeric-cell" id="avghash"></td>
+					</tr>											
+					<tr>
+					  <td class="label-cell">Latency</td>
+					  <td class="numeric-cell" id="latency"></td>
+					</tr>												
+					<tr>
+					  <td class="label-cell">Donate Level</td>
+					  <td class="numeric-cell" id="donatelevel"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Donated</td>
+					  <td class="numeric-cell" id="donated"></td>
+					</tr>
+				 </tbody>
+				</table>
+				<table>					 
+					<thead>
+					<tr>
+					  <td class="label-cell">Upstreams</td>
+					</tr>
+					</thead>
+					<tbody>	
+					<tr>
+					  <td class="label-cell">Total</td>
+					  <td class="numeric-cell" id="up_tot"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Active</td>
+					  <td class="numeric-cell" id="up_active"></td>
+					</tr>					
+					<tr>
+					  <td class="label-cell">Error</td>
+					  <td class="numeric-cell" id="up_error"></td>
+					</tr>					
+					<tr>
+					  <td class="label-cell">Ratio</td>
+					  <td class="numeric-cell" id="up_ratio"></td>
+					</tr>					
+					<tr>
+					  <td class="label-cell">Sleep</td>
+					  <td class="numeric-cell" id="up_sleep"></td>
+					</tr>
+					</tbody>
+				</table>
+				<table>					 
+					<thead>
+					<tr>
+					  <td class="label-cell">Shares</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+					  <td class="label-cell">Accepted</td>
+					  <td class="numeric-cell" id="accepted"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Invalid</td>
+					  <td class="numeric-cell" id="invalid"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Rejected</td>
+					  <td class="numeric-cell" id="rejected"></td>
+					</tr>						
+					<tr>
+					  <td class="label-cell">Expired</td>
+					  <td class="numeric-cell" id="expired"></td>
+					</tr>
+					<tr>
+					  <td class="label-cell">Avg. Time</td>
+					  <td class="numeric-cell" id="avgT"></td>
+					</tr>
+				  </tbody>
+				</table>				
+				<table>			
+					<thead>
+					<tr>
+					  <td class="label-cell">Top Ten Results</td>
+					</tr>
+					</thead>
+				<tbody id="ten_best">
+				</tbody>
+				</table>				
+			</div>  
+          </div>
+	 </div> 	
+    </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/framework7/2.2.1/js/framework7.min.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.0/jquery.timeago.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
