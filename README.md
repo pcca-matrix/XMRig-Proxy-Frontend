@@ -23,7 +23,7 @@ You must set access token and set "restricted": false to the xmrig-proxy config.
 ## Settings
 Change http path in php/cron.php according to your webserver configuration
 
-$php_path = "http://127.0.0.1/xmrig-proxy";
+$php_path = "http://<i></i>127.0.0.1/xmrig-proxy";
 
 Add proxies ip, port and token Authorization in php/get_json.php
 
