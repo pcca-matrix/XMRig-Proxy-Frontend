@@ -7,11 +7,13 @@ Compatible with Ios, Android, Desktop
 
 ## Installation
 You must have apache webserver with php 5.x or 7.x with extension sqlite3 and curl enabled.
+
 sudo apt-get install apache2 libapache2-mod-php php-sqlite3 php-curl
 
 extract directory xmrig-proxy to your webserver root
 
 Sqlite Database directory shall be owned by www-data
+
 sudo chown www-data /var/www/html/xmrig-proxy/php/
 
 Add cronjob every 5 min to your crontab
@@ -40,5 +42,7 @@ Create an Issue with your Idea or open a Pull Request!
 
 ## WIP
 Switch Pool Every x minutes automatically or set the percentage of time spent on each pool
+
 managing multiple proxies
+
 add password protect
