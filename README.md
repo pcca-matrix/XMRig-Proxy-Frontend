@@ -46,3 +46,7 @@ Switch Pool Every x minutes automatically or set the percentage of time spent on
 managing multiple proxies
 
 add password protect
+
+
+* XMR: `44ZD1s12j8M6upWXGUS1R2YzXKiKpVmTzYKbrLYSp6pDWvW7C4ALfQ2VNyg6pt2tvA94Tu5kbcDLcLbTvjJBYk6zLFYmWM3`
+* BTC: `1F2UpGsQETpyCCnMEBLFc5whDFAhgXJVU1`
