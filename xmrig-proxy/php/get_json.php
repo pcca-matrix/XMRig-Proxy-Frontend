@@ -17,6 +17,7 @@ switch($_POST['cc'])
 		$proxy_adress = $proxy_list[$proxy_id]["ip"].":".$proxy_list[$proxy_id]["port"];	
 		$results = $db->query("SELECT * FROM 'proxy_$proxy_adress' WHERE date >= '$date'");
 		$i=0;
+		$arr = array();
 		while($row = $results->fetchArray()) {		
 			$arr[$i]['date'] = $row['date'];
 			$arr[$i]['value'] = $row['value'];
@@ -28,13 +29,14 @@ switch($_POST['cc'])
     case 'write_db':
 		$db = new SQLite3('proxy.db');
 		foreach($proxy_list as $proxy){
-			$db->query("CREATE TABLE IF NOT EXISTS 'proxy_$proxy' ('id_auto' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'date' DATETIME, 'value' NUMERIC);");			
+			$address = $proxy["ip"].":".$proxy["port"];
+			$db->query("CREATE TABLE IF NOT EXISTS 'proxy_$address' ('id_auto' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'date' DATETIME, 'value' NUMERIC);");			
 			$endpoint = "summary";
 			$arr = json_decode(get_curl_data($proxy["ip"], $proxy["port"], $endpoint, $proxy["token"]),true);
 			if($arr['uptime'] > 0){
 				$val = round($arr['hashrate']['total'][2]*1000,2);
 				$date = date('Y-m-d H:i'); 
-				$stm = "INSERT INTO 'proxy_$proxy' ('date' ,'value') VALUES('$date', '$val')";
+				$stm = "INSERT INTO 'proxy_$address' ('date' ,'value') VALUES('$date', '$val')";
 				$db->query($stm);
 			}
 		}		
