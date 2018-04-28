@@ -301,12 +301,13 @@ function get_data(){
 		},500);
 		
 		$$('#change_proxy').on("change",function() {
-			proxy_id = this.value; graph(); get_config();	
+			proxy_id = this.value; clearTimeout(configTimer); graph(); get_config();	
 		});
 
 	},"json");
 	configTimer = setTimeout(function(){
 		get_data();
+		graph();
 	},20000);
 }
 
