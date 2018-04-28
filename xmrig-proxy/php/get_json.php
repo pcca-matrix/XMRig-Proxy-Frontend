@@ -1,14 +1,25 @@
 <?php
 header('Content-Type: application/json');
+error_reporting(0);
 if(!isset($_POST["cc"])) die;
+$token = null;
+$headers = apache_request_headers();
+
+//-- Webapp password
+$app_password = "SECRET";
 
 //-- Array of proxies ip adresse, port and token
 $proxy_list = array();
-$proxy_list[0] = array("ip"=>"127.0.0.1", "port"=>"8115", "token"=>"SECRET");
+$proxy_list[0] = array("ip"=>"127.0.0.1", "port"=>"8115", "token"=>"SECRET", "label"=>"PROXY 1 LABEL");
+
 
 switch($_POST['cc'])
 {
-    case 'read_db':
+	case 'check_password':
+		echo json_encode(verify_password($headers));
+	break;
+	
+    case ($_POST['cc'] == 'read_db' && verify_password($headers) == "true"):
 		$proxy_id = $_POST["proxy"];
 		$db = new SQLite3('proxy.db');
 		$days = intval($_POST["days"]);
@@ -41,14 +52,23 @@ switch($_POST['cc'])
 			}
 		}		
     break;
-   
-    case 'proxy_data':
+	
+	case ($_POST['cc'] == 'proxy_data' && verify_password($headers) == "true"):	
 		$proxy_id = $_POST["proxy"];
 		$endpoint = $_POST["endpoint"];
-		echo get_curl_data($proxy_list[$proxy_id]["ip"], $proxy_list[$proxy_id]["port"], $endpoint, $proxy_list[$proxy_id]["token"]);
+		$api_data = json_decode(get_curl_data($proxy_list[$proxy_id]["ip"], $proxy_list[$proxy_id]["port"], $endpoint, $proxy_list[$proxy_id]["token"]),true);
+		$proxy_infos = array();
+		$i=0;
+		foreach($GLOBALS["proxy_list"] as $k => $v){
+			$proxy_infos[$i]["id"] = $k;
+			$proxy_infos[$i]["label"] = $v["label"];
+			$i++;
+		}
+		$api_data["proxy_infos"] = $proxy_infos;
+		echo json_encode($api_data);
     break;
 	
-	case 'put_data':
+	case ($_POST['cc'] == 'put_data' && verify_password($headers) == "true"):
 	    $proxy_id = $_POST["proxy"];
 		$endpoint = $_POST["endpoint"];
 		$url = "http://".$proxy_list[$proxy_id]["ip"].":".$proxy_list[$proxy_id]["port"]."/1/$endpoint";
@@ -73,12 +93,18 @@ switch($_POST['cc'])
 		curl_close($ch);
 		echo json_encode($response);
 	break;
-
+	
 }
 
 /******************************************************************/
 /* 						FUNCTIONS								  */
 /******************************************************************/
+function verify_password($headers){
+	$token = $headers['Authorization'];
+	$password = base64_decode($token);
+	if($GLOBALS["app_password"] != trim($password)) return "false"; else return "true";
+}
+
 function get_curl_data($ip, $port, $endpoint, $token){
 	$ch = curl_init();
 	$authorization = "Authorization: Bearer ".$token;
