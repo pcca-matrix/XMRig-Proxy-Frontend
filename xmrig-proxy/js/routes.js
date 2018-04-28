@@ -7,22 +7,22 @@ var routes = [
   },  
   // Workers page
   {
-    path: '/workers',
+    path: '/workers/',
     url: './pages/workers.html',
     name: 'workers',
   },  
   // Settings page
   {
-    path: '/settings',
+    path: '/settings/',
     url: './pages/settings.html',
     name: 'settings',
   },
   // Change Pool page
   {
-    path: '/ch_pool',
+    path: '/ch_pool/',
     url: './pages/ch_pool.html',
     name: 'ch_pool',
-  },
+  }, 
   // Default route (404 page). MUST BE THE LAST
   {
     path: '(.*)',

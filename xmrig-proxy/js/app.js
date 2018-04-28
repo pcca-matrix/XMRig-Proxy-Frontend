@@ -10,11 +10,105 @@ var app = new Framework7({
   routes: routes,
 });
 
+var password = false;
+if(localStorage.getItem('save-pass') == "true") password = localStorage.getItem('xmrig-pass');
 var mainView = app.views.create('.view-main');
 var proxy_id = 0;
 var config_data = {};
 var days = 1;
+var configTimer;
 window.onresize = function() { Plotly.Plots.resize('proxy_hashrate'); }
+
+if(login()){
+	app.request.setup({headers: {'Authorization': password}});
+	graph();
+	get_config();
+}
+
+$$('#mindays').on("click",function() {
+	if(days > 1) { days--; graph(); }
+	$('#numdays').text(days);
+});
+
+$$('#maxdays').on("click",function() {
+		days++; graph();
+		$('#numdays').text(days);
+});	
+
+$$('#disconnect').on("click",function() {
+	localStorage.removeItem('save-pass');
+	localStorage.removeItem('xmrig-pass');
+	password = false;
+	login();
+	app.request.setup({headers: {'Authorization': password}});
+	clearTimeout(configTimer);
+});	
+
+	
+//-- Simple Login Page
+function login(){
+	if(password != false) return true;
+	  var login_screen = app.loginScreen.create({
+	  content: '<div class="login-screen">'+
+		'<div class="view">'+
+		  '<div class="page">'+
+			'<div class="page-content login-screen-content">'+
+			  '<div class="login-screen-title">XMRig-Proxy<div style="font-size:18px;color: rgba(255,255,255,.54);">FrontEnd</div></div>'+
+				'<div class="list">'+
+				  '<ul>'+
+					'<li class="item-content item-input">'+
+					  '<div class="item-inner">'+
+						'<div class="item-title item-label">Password</div>'+
+						'<div class="item-input-wrap">'+
+						  '<input type="password" name="password" placeholder="Your password">'+
+						'</div>'+
+					  '</div>'+
+					'</li>'+
+				  '</ul>'+
+				'</div>'+
+				'<div class="list">'+
+				  '<ul>'+
+					'<li>'+
+					  '<label class="item-checkbox item-content">'+
+						'<input type="checkbox" name="keep_logged"/>'+
+						'<i class="icon icon-checkbox"></i>'+
+						'<div class="item-inner">'+
+						  '<div class="item-title">Save on this device</div>'+
+						'</div>'+
+					 '</label>'+
+					'</li>'+
+					'<li><a class="item-link list-button" id="enter_pass">Enter</a></li>'+
+				  '</ul>'+
+				  '<div class="block-footer">'+
+					''+
+				  '</div>'+
+				'</div>'+
+			'</div>'+
+		  '</div>'+
+	   '</div>'+
+	  '</div>'
+	});
+	login_screen.open();
+
+	$$('#enter_pass').on("click",function() {
+		password = window.btoa( $$('input[name=password]').val() );
+		app.request.setup({headers: {'Authorization': password}});
+		app.request.post('php/get_json.php', {cc:"check_password"}, function (data) {
+			if(data == "true"){
+				if($$('input[name=keep_logged]').prop('checked') === true){
+					localStorage.setItem('save-pass', true);
+					localStorage.setItem('xmrig-pass', password);
+				}
+				login_screen.close();
+				graph();
+				get_config();
+			}else{
+				app.dialog.alert('Wrong Password!');
+				$$('input[name=password]').val("");
+			}
+		},"json");
+	});
+}
 
 //-- Workers page init
 $$(document).on('page:init', '.page[data-name="workers"]', function (e) {
@@ -23,6 +117,7 @@ $$(document).on('page:init', '.page[data-name="workers"]', function (e) {
 
 //-- Change pool page init
 $$(document).on('page:init', '.page[data-name="ch_pool"]', function (e) {
+	$$('.title_proxy').html("Proxy <b>" + config_data.proxy_infos[proxy_id].label +"</b>" );
   	$.each( config_data.pools, function( i, item ){
 		$('select[name=pool]').append($("<option></option>").attr("value",i).text(item.url));
 	});	
@@ -46,7 +141,8 @@ $$(document).on('page:init', '.page[data-name="ch_pool"]', function (e) {
 
 
 //-- Settings page init
-$$(document).on('page:init', '.page[data-name="settings"]', function (e) {	
+$$(document).on('page:init', '.page[data-name="settings"]', function (e) {
+	$$('.title_proxy').html("Proxy <b>" + config_data.proxy_infos[proxy_id].label +"</b>" );
 	$.each( config_data, function( i, item ){		
 		if(item === true) item = "true"; if(item === false) item = "false";
 		if(item)$("[name='"+i+"']").val(item);
@@ -65,19 +161,6 @@ $$(document).on('page:init', '.page[data-name="settings"]', function (e) {
 	});
 })
 
-//-- On app start
-graph();
-get_config();
-
-$$('#mindays').on("click",function() {
-	if(days > 1) { days--; graph(); }
-	$('#numdays').text(days);
-});
-$$('#maxdays').on("click",function() {
-		days++; graph();
-		$('#numdays').text(days);
-});	
-
 
 //-- functions
 function get_config(){
@@ -89,6 +172,7 @@ function get_config(){
 
 function workers_list(){
 	app.request.post('php/get_json.php', {cc:"proxy_data", endpoint: 'workers', proxy: proxy_id}, function (data) {
+		$$('.title_proxy').html("Proxy <b>" + config_data.proxy_infos[proxy_id].label +"</b>" );
 		$$('#worker_list').html("");
 		$.each( data.workers, function( i, item ){
 			$$('#worker_list').append('<li>'+
@@ -123,7 +207,6 @@ function workers_list(){
 		});	
 	},"json");	
 }
-
 
 function graph(){
 	app.request.post('php/get_json.php', {cc:"read_db", proxy:proxy_id, days:days}, 
@@ -179,8 +262,13 @@ function graph(){
 
 function get_data(){
 	app.request.post('php/get_json.php', {cc:"proxy_data",  endpoint: 'summary', proxy: proxy_id}, function (data) {
-		$$("#proxy_infos").html( data.worker_id + " - " + data.version);
+		var proxy_list = "";
+		$.each(data.proxy_infos, function( i, item ){
+			proxy_list+='<option value="'+i+'" ' + (i == proxy_id ? "selected" : "") + '>'+item.label+'</option>';
+		});
+		$$("#proxy_infos").html( "<select id='change_proxy' style='float:right;border:1px solid grey;padding:3px;'>" + proxy_list + "</select>");
 		$$("#act_pool").html( config_data.pools[0].url );
+		$$("#worker_id").html( data.worker_id );
 		$$("#uptime").html( secondstotime(data.uptime) );
 		$$("#workers").html( "Now: <b>"+data.miners.now+"</b> - Max: <b>"+data.miners.max+"</b>");
 		$$("#tothash").html(getReadableHashRateString(data.results.hashes_total));
@@ -211,9 +299,13 @@ function get_data(){
 			$$("#ten_best").html(best_list);
 			$$('#hashrate').html(hash_list);
 		},500);
+		
+		$$('#change_proxy').on("change",function() {
+			proxy_id = this.value; graph(); get_config();	
+		});
 
 	},"json");
-	setTimeout(function(){
+	configTimer = setTimeout(function(){
 		get_data();
 	},20000);
 }
