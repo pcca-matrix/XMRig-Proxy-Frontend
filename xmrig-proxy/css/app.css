@@ -9,7 +9,10 @@
        url(../fonts/MaterialIcons-Regular.woff) format('woff'),
        url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
-
+select option {
+color: black !important;
+background-color:#C0C0C0;
+}
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
