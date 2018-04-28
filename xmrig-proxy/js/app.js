@@ -179,7 +179,7 @@ function workers_list(){
 			  '<div class="item-content">'+
 				'<div class="item-inner">'+
 				  '<div class="item-title-row">'+
-					'<div class="item-title">'+item[0].substr(0,5)+'...'+item[0].substr(5,4)+'</div>'+
+					'<div class="item-title">'+item[0].substr(0,5)+'...'+item[0].substr(-5)+'</div>'+
 					'<div class="item-after">('+item[2]+') '+item[1]+'</div>'+
 				  '</div>'+
 				  '<div class="item-subtitle" style="font-size:11px">'+
