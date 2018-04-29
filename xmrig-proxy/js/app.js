@@ -15,6 +15,7 @@ if(localStorage.getItem('save-pass') == "true") password = localStorage.getItem(
 var mainView = app.views.create('.view-main');
 var proxy_id = 0;
 var config_data = {};
+var data_session = { "workers_set":[ {"sort_id":"12","sort_order":"asc"} ] };
 var days = 1;
 var configTimer;
 window.onresize = function() { Plotly.Plots.resize('proxy_hashrate'); }
@@ -82,7 +83,6 @@ function login(){
 					'<li><a class="item-link list-button" id="enter_pass">Enter</a></li>'+
 				  '</ul>'+
 				  '<div class="block-footer">'+
-					''+
 				  '</div>'+
 				'</div>'+
 			'</div>'+
@@ -163,8 +163,8 @@ $$(document).on('page:init', '.page[data-name="settings"]', function (e) {
 	});
 })
 
-
 //-- functions
+
 function get_config(){
 	app.request.post('php/get_json.php', {cc:"proxy_data", endpoint: 'config', proxy: proxy_id}, function (data) {
 		config_data = data;
@@ -172,41 +172,62 @@ function get_config(){
 	},"json");	
 }
 
-function workers_list(){
+function workers_list(){	
+	$('.w_sort').unbind("click").click(function(){
+		var si = $$(this).find(".f7-icons").text();
+		if(si == "sort"){
+			$('.w_sort').each(function(i, obj) { if( $$(this).find(".f7-icons").text('sort_fill') )$$(this).find(".f7-icons").text('sort'); });	
+			$$(this).find(".f7-icons").text('sort_fill'); data_session.workers_set.sort_order = "desc";
+		}else{
+			 $$(this).find(".f7-icons").text('sort'); data_session.workers_set.sort_order = "asc";
+		}
+		data_session.workers_set.sort_id = this.id.replace('sort', '');
+		workers_list();
+	});
+	
 	app.request.post('php/get_json.php', {cc:"proxy_data", endpoint: 'workers', proxy: proxy_id}, function (data) {
+		data.workers.sort( JSONSortOrder(data_session.workers_set.sort_id, data_session.workers_set.sort_order) );
+		var hash_list="";
+		$.each( data.hashrate.total, function( i, item ){
+			if(i<5)hash_list+="<td>"+getReadableHashRateString(item*1000)+"/s</td>";
+		});
 		$$('.title_proxy').html("Proxy <b>" + config_data.proxy_infos[proxy_id].label +"</b>" );
 		$$('#worker_list').html("");
+		var tot_hashes = 0;
 		$.each( data.workers, function( i, item ){
 			$$('#worker_list').append('<li>'+
 			  '<div class="item-content">'+
 				'<div class="item-inner">'+
-				  '<div class="item-title-row">'+
+				  '<div class="item-title-row" style="font-size:14px">'+
 					'<div class="item-title">'+item[0].substr(0,5)+'...'+item[0].substr(-5)+'</div>'+
 					'<div class="item-after">('+item[2]+') '+item[1]+'</div>'+
 				  '</div>'+
-				  '<div class="item-subtitle" style="font-size:11px">'+
+				  '<div class="item-subtitle" style="font-size:11px;color: rgba(255,255,255,.54)">'+
 					$.timeago(new Date(item[7]).toISOString())+ 
-					' Tot: '+getReadableHashRateString(item[6])+' ('+item[3]+')'+' ('+item[4]+')'+' ('+item[5]+')'+
+					' - '+getReadableHashRateString(item[6])+' ('+item[3]+')'+' ('+item[4]+')'+' ('+item[5]+')'+
 				  '</div>'+
-							'<div class="item-row" style="font-size:12px;">'+
-							  '<div class="item-cell">1m</div>'+
-							  '<div class="item-cell">10m</div>'+
-							  '<div class="item-cell">1h</div>'+
-							  '<div class="item-cell">12h</div>'+
-							  '<div class="item-cell">24h</div>'+
-						    '</div>'+
-						    '<div class="item-row" style="font-size:11px;">'+
-							  '<div class="item-cell">'+getReadableHashRateString(item[8]*1000)+"/s"+'</div>'+
-							  '<div class="item-cell">'+getReadableHashRateString(item[9]*1000)+"/s"+'</div>'+
-							  '<div class="item-cell">'+getReadableHashRateString(item[10]*1000)+"/s"+'</div>'+
-							  '<div class="item-cell">'+getReadableHashRateString(item[11]*1000)+"/s"+'</div>'+
-							  '<div class="item-cell">'+getReadableHashRateString(item[12]*1000)+"/s"+'</div>'+
-						    '</div>'+
+						'<div class="item-row" style="font-size:11px;font-weight:bold">'+
+						  '<div class="item-cell">1m</div>'+
+						  '<div class="item-cell">10m</div>'+
+						  '<div class="item-cell">1h</div>'+
+						  '<div class="item-cell">12h</div>'+
+						  '<div class="item-cell">24h</div>'+
+						'</div>'+
+						'<div class="item-row" style="font-size:11px;color: rgba(255,255,255,.54)">'+
+						  '<div class="item-cell">'+getReadableHashRateString(item[8]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell">'+getReadableHashRateString(item[9]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell">'+getReadableHashRateString(item[10]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell">'+getReadableHashRateString(item[11]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell">'+getReadableHashRateString(item[12]*1000)+"/s"+'</div>'+
+						'</div>'+
 				'</div>'+
 			  '</div>'+
 			'</li>'
 			);
-		});	
+			tot_hashes+=item[6];
+		});
+		hash_list+="<td>"+getReadableHashRateString(tot_hashes)+"/s</td>";
+		$$('#w_hashrates').html(hash_list);		
 	},"json");	
 }
 
@@ -268,7 +289,8 @@ function get_data(){
 		$.each(data.proxy_infos, function( i, item ){
 			proxy_list+='<option value="'+i+'" ' + (i == proxy_id ? "selected" : "") + '>'+item.label+'</option>';
 		});
-		$$("#proxy_infos").html( "<select id='change_proxy' style='float:right;border:1px solid grey;padding:3px;'>" + proxy_list + "</select>");
+		$$("#proxy_infos").html( "<select id='change_proxy' style='text-align-last:center;border-radius:20px;color:black;background-color:#007aff;float:right;padding:6px'>" + proxy_list + "</select>");
+		$$("#bar_infos").html( " - " + getReadableHashRateString( (data.results.hashes_total / data.uptime))+"/s Wrk. "+data.miners.now );
 		$$("#act_pool").html( config_data.pools[0].url );
 		$$("#worker_id").html( data.worker_id );
 		$$("#uptime").html( secondstotime(data.uptime) );
@@ -302,8 +324,10 @@ function get_data(){
 			$$('#hashrate').html(hash_list);
 		},500);
 		
-		$$('#change_proxy').on("change",function() {
-			proxy_id = this.value; clearTimeout(configTimer); graph(); get_config();	
+		$('#change_proxy').unbind("change").change(function(e) {
+			proxy_id = this.value; clearTimeout(configTimer); graph(); get_config();
+			app.dialog.preloader('Changing proxy ...');
+			setTimeout(function(){ app.dialog.close(); }, 950);
 		});
 
 	},"json");
@@ -372,4 +396,15 @@ function getReadableHashRateString(hashrate) {
 		i++;
 	}
 	return parseFloat(hashrates).toFixed(2) + byteUnits[i];
+}
+
+function JSONSortOrder(prop, order){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return (order == "asc" ? 1 : -1);
+      }else if( a[prop] < b[prop] ){
+          return (order == "asc" ? -1 : 1)
+      }
+      return 0;
+   }
 }
