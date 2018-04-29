@@ -36,13 +36,15 @@ $$('#maxdays').on("click",function() {
 });	
 
 $$('#disconnect').on("click",function() {
-	localStorage.removeItem('save-pass');
-	localStorage.removeItem('xmrig-pass');
-	password = false;
-	login();
-	app.request.setup({headers: {'Authorization': password}});
-	clearTimeout(configTimer);
-});	
+	app.dialog.confirm('Disconnect  ?', 'Confirm', function () {
+		localStorage.removeItem('save-pass');
+		localStorage.removeItem('xmrig-pass');
+		password = false;
+		login();
+		app.request.setup({headers: {'Authorization': password}});
+		clearTimeout(configTimer);
+	});
+});
 
 	
 //-- Simple Login Page
