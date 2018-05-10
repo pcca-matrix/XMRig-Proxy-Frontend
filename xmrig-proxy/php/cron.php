@@ -9,11 +9,4 @@ curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query(array('cc' => 'write_db')))
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $server_output = curl_exec ($ch);
 curl_close ($ch);
-
-/******************************************************************/
-/* 		Get jobs from Sqlite DB (auto-switching pool)	(WIP) 	  */
-/******************************************************************/
-function get_dbJobs(){
-	
-}
 ?>
