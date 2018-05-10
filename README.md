@@ -1,8 +1,13 @@
 # XMRig-Proxy-Frontend
 Simple Mobile HTML Frontend for XMRig-proxy based on [Framework7](https://github.com/framework7io/framework7)
-It shows all the important informations and allow change pool and settings with xmrig-proxy API.
 
-Manage multiple proxy instances
+-It shows all the important informations and allow change pool and settings with xmrig-proxy API.
+
+-Manage multiple proxy instances
+
+-Switch Pool Every x minutes automatically or set the percentage of time spent on each pool
+
+-Keep history of pool change with stats
 
 Compatible with IOS, Android, Desktop (Chrome, Firefox, IE)
 
@@ -30,7 +35,7 @@ Change http path in php/cron.php according to your webserver configuration
 
 $php_path = "http://<i></i>127.0.0.1/xmrig-proxy";
 
-Add proxies ip, port, token authorization and app_password in php/get_json.php
+Add proxies ip, port, token authorization and app_password in php/config.php
 
 $proxy_list[0] = array("ip"=>"127.0.0.1", "port"=>"8000", "token"=>"SECRET", "label"=>"YOUR PROXY 1 LABEL");
 
@@ -43,6 +48,14 @@ The app_password is the password asked when you open webapp.
 ## Usage
 For pool change , add all your pools to the xmrig-proxy config.json and select one from within the webapp.
 
+Percentage change :
+
+percentage is calculate on day (1440 min) , if you put 10% on pool#1 and 90% on pool#2 then proxy will stay on pool#1 for 144 mins and on pool#2 for 1296 mins.
+
+Time change:
+
+miner stay on pool for defined hours then swap to next pools.
+
 ## Bugs
 If you found a Bug please let me know and create an Issue !
 
@@ -50,8 +63,10 @@ If you found a Bug please let me know and create an Issue !
 Create an Issue with your Idea or open a Pull Request!
 
 ## WIP
-Switch Pool Every x minutes automatically or set the percentage of time spent on each pool
 
+Automatic switching pool to mine the most profitable coin
+
+Add and remove pool from app
 
 
 
