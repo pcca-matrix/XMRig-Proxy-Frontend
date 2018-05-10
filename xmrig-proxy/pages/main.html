@@ -1,0 +1,170 @@
+<div data-name="main" class="page">
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="left">
+			  <a href="#" class="link icon-only panel-open" data-panel="left">
+				<i class="icon f7-icons ios-only">menu</i>
+				<i class="icon material-icons md-only">menu</i>
+			  </a>
+			</div>
+			<div class="title">XMRig-Proxy</div>
+			<div class="right">	
+			  <a href="#" class="icon-only upd_sign" style="opacity: 0;">
+			  	<i class="icon f7-icons ios-only">bolt_fill</i>
+				<i class="icon material-icons md-only" style="margin-right:15px">done</i>
+			  </a>
+			</div>		  
+		</div>
+	</div>
+	<div class="page-content">
+		<div class="card data-table">
+			<div class="card-header">
+				<div class="data-table-title">Proxy Stats <span id="bar_infos" style="font-size:15px;color: rgba(255,255,255,.54);"></span></div>
+			</div>
+			<div class="content-block">
+				<div id="proxy_hashrate"></div>
+				<div id="daysdiv" style="margin-top:5px;margin-bottom:15px;"> H/R History for  
+					<i class="icon icon-back" id="mindays" style="margin:0px 10px 0px 15px;padding:4px"></i> 	    
+					<span id="numdays">1</span>
+					<i class="icon icon-forward" id="maxdays" style="margin:0px 15px 0px 10px;padding:4px"></i> 
+					days
+				</div>
+			</div>
+			
+			<table style="font-size:11px">
+			  <thead>
+			  <tr>
+				<td>1 M</td>
+				<td>10 M</td>
+				<td>1 H</td>
+				<td>12 H</td>
+				<td>24 H</td>
+			  </tr>
+			  </thead>
+			  <tbody>
+			   <tr id="hashrate">
+			   </tr>
+			  </tbody>
+			  </table>
+			  
+			  <table>
+			   <thead>
+				<tr>
+					<td class="label-cell">Proxy Infos</td>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td class="label-cell">Act. Proxy</td>
+					<td class="" id="proxy_infos">
+					<select id="change_proxy" style="text-align-last:center;border-radius:20px;color:black;background-color:#007aff;float:right;padding:6px"></select>
+					</td>
+				</tr>
+				<tr>
+				  <td class="label-cell">Act. Pool</td>
+				  <td class="numeric-cell" id="act_pool"></td>
+				</tr>								
+				<tr>
+				  <td class="label-cell">Uptime</td>
+				  <td class="numeric-cell" id="uptime"></td>
+				</tr>					
+				<tr>
+				  <td class="label-cell">Worker ID</td>
+				  <td class="numeric-cell" id="worker_id"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Workers</td>
+				  <td class="numeric-cell" id="workers"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Total Hashes</td>
+				  <td class="numeric-cell" id="tothash"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Avg. Hashrate</td>
+				  <td class="numeric-cell" id="avghash"></td>
+				</tr>											
+				<tr>
+				  <td class="label-cell">Latency</td>
+				  <td class="numeric-cell" id="latency"></td>
+				</tr>												
+				<tr>
+				  <td class="label-cell">Donate Level</td>
+				  <td class="numeric-cell" id="donatelevel"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Donated</td>
+				  <td class="numeric-cell" id="donated"></td>
+				</tr>
+			 </tbody>
+			</table>				
+			<table>					 
+				<thead>
+				<tr>
+				  <td class="label-cell">Upstreams</td>
+				</tr>
+				</thead>
+				<tbody>	
+				<tr>
+				  <td class="label-cell">Total</td>
+				  <td class="numeric-cell" id="up_tot"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Active</td>
+				  <td class="numeric-cell" id="up_active"></td>
+				</tr>					
+				<tr>
+				  <td class="label-cell">Error</td>
+				  <td class="numeric-cell" id="up_error"></td>
+				</tr>					
+				<tr>
+				  <td class="label-cell">Ratio</td>
+				  <td class="numeric-cell" id="up_ratio"></td>
+				</tr>					
+				<tr>
+				  <td class="label-cell">Sleep</td>
+				  <td class="numeric-cell" id="up_sleep"></td>
+				</tr>
+				</tbody>
+			</table>
+			<table>					 
+				<thead>
+				<tr>
+				  <td class="label-cell">Shares</td>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+				  <td class="label-cell">Accepted</td>
+				  <td class="numeric-cell" id="accepted"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Invalid</td>
+				  <td class="numeric-cell" id="invalid"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Rejected</td>
+				  <td class="numeric-cell" id="rejected"></td>
+				</tr>						
+				<tr>
+				  <td class="label-cell">Expired</td>
+				  <td class="numeric-cell" id="expired"></td>
+				</tr>
+				<tr>
+				  <td class="label-cell">Avg. Time</td>
+				  <td class="numeric-cell" id="avgT"></td>
+				</tr>
+			  </tbody>
+			</table>				
+			<table>			
+				<thead>
+				<tr>
+				  <td class="label-cell">Top Ten Results</td>
+				</tr>
+				</thead>
+			<tbody id="ten_best">
+			</tbody>
+			</table>
+		</div>  
+	</div>
+</div> 

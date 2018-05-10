@@ -4,17 +4,41 @@
 		<div class="left">
 			<a href="index.html" class="back link" data-force="false"><i class="icon icon-back"></i></a>
 		</div>
-	  <div class="title">XMRig-Proxy Change Pool</div>
+	  <div class="title">XMRig-Proxy Pools</div>
 	</div>
   </div>
   <div class="page-content">
-	<div class="block-title title_proxy"></div>
-	<div class="list media-list">
+	<div class="block-title title_proxy"></div>	
+	<div class="list">
+	  <ul>
+		<li>
+		<div class="item-content">
+			<div class="item-inner item-cell">
+			  <div class="item-row" style="font-size:12px;color: rgba(255,255,255,.54)">
+				<div class="item-cell">Mode</div>
+				<div class="item-cell">Uptime</div>
+				<div class="item-cell">Remain</div>
+				<div class="item-cell">Hashes</div>
+				<div class="item-cell">Shares</div>
+			  </div>
+			  <div class="item-row" style="font-size:12px;">
+				<div class="item-cell" id="pool_mode"></div>
+				<div class="item-cell" id="pool_timeon"></div>
+				<div class="item-cell" id="pool_remain"></div>
+				<div class="item-cell" id="pool_hashes"></div>
+				<div class="item-cell" id="pool_shares"></div>
+			  </div>
+			</div>
+		</div>
+		</li>
+	  </ul>	
+	</div>
+	<form class="list" id="ch_pool-form">
 	  <ul>
 		<li>  
 		  <div class="item-content item-input">
 			<div class="item-inner">
-			  <div class="item-title item-label">Change Pool</div>
+			  <div class="item-title item-label">Change Actual Pool</div>
 			  <div class="item-input-wrap">
 				<select name="pool">
 				</select>
@@ -25,14 +49,22 @@
 		<li>  
 		  <div class="item-content item-input">
 			<div class="item-inner">
-			  <div class="item-title item-label">Switch Pool Every (Min.)</div>
+			  <div class="item-title item-label">Switch Pool Every (Hours.)</div>
 			  <div class="item-input-wrap">
-				<input type="number" placeholder="Enter number" name="loop_minutes" validate pattern="[0-9]*" data-error-message="Only numbers please!">
+				<input type="number" placeholder="Enter number" name="loop_time" validate pattern="[0-9]*" data-error-message="Only numbers please!">
 			  </div>
 			</div>
 		  </div>
-		</li>		
+		</li>
+		<li>  
+		  <div class="item-content item-input">
+			<div class="item-inner" id="percent_pool">
+				<div class="item-title item-label">Switch Pool %</div>
+			</div>
+		  </div>
+		</li>			
 	  </ul>
-    </div>
+    </form>
+	<div id="submit_pool" style="display:none;width:150px;margin:auto"><a class="button" id="submit-settings">Submit</a></div>
   </div>	
 </div>

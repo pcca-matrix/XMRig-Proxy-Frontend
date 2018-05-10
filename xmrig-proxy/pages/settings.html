@@ -26,10 +26,9 @@
 		  <div class="item-inner">
 			<div class="item-title item-label">Background</div>
 			<div class="item-input-wrap">
-			  <select placeholder="Please choose..." name="background">
-				<option value="true">True</option>
-				<option value="false">False</option>
-			  </select>
+			  	<label class="toggle">
+					<input type="checkbox" name="background" value="yes"><i class="toggle-icon"></i>
+				</label>
 			</div>
 		  </div>
 		</li>
@@ -37,10 +36,9 @@
 		  <div class="item-inner">
 			<div class="item-title item-label">Colors</div>
 			<div class="item-input-wrap">
-			  <select placeholder="Please choose..." name="colors">
-				<option value="true">True</option>
-				<option value="false">False</option>
-			  </select>
+				<label class="toggle">
+					<input type="checkbox" name="colors" value="yes"><i class="toggle-icon"></i>
+				</label>
 			</div>
 		  </div>
 		</li>
@@ -98,16 +96,33 @@
 		<li class="item-content item-input">
 		  <div class="item-inner">
 			<div class="item-title item-label">Verbose</div>
+				<div class="item-input-wrap">
+					<label class="toggle">
+						<input type="checkbox" name="verbose" value="yes"><i class="toggle-icon"></i>
+					</label>
+				</div>
+		  </div>
+		</li>			
+		<li class="item-content item-input">
+		  <div class="item-inner">
+			<div class="item-title item-label">Worker id</div>
 			<div class="item-input-wrap">
-			  <select placeholder="Please choose..." name="verbose">
-				<option value="true">True</option>
-				<option value="false">False</option>
-			  </select>
+				<input type="text" name="api:worker-id">
 			</div>
 		  </div>
 		</li>	
 	  </ul>
 	</div>
-	<div id="submit" style="display:none"><a class="button" id="submit-settings">Submit</a></div>
+	<div id="submit" style="display:none;width:200px;margin:auto"><a class="button" id="submit-settings">Submit</a></div>
+	<div class="block block-strong">
+		<div class="block-title">Delete Files</div>
+		  <div class="block block-strong">
+			<p class="row">
+			  <button class="button col delete_file" data-file="history.json" data-name="history">History</button>
+			  <button class="button col delete_file" data-file="jobs.json" data-name="jobs">Jobs</button>
+			  <button class="button col delete_file" data-file="proxy.db" data-name="graph">Graph db</button>
+			</p>
+		  </div>
+	</div>
   </div>
 </div>
