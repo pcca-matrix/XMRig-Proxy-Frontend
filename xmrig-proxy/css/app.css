@@ -9,10 +9,13 @@
        url(../fonts/MaterialIcons-Regular.woff) format('woff'),
        url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
-select option {
-color: black !important;
-background-color:#C0C0C0;
+
+i.icon.icon-xmrig {
+   width: 22px;
+   height: 22px;
+   background-image: url("../img/icon.png");
 }
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -70,5 +73,13 @@ background-color:#C0C0C0;
   text-align: center;
 }
 
+
+select option {
+color: black !important;
+background-color:#C0C0C0;
+}
+.w_sort{
+padding:8px;	
+}
 
 
