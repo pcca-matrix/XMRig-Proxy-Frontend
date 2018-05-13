@@ -77,6 +77,8 @@ switch($_POST['cc'])
 			$db->query("CREATE TABLE IF NOT EXISTS 'proxy_$proxy_address' ('id_auto' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'date' DATETIME, 'value' NUMERIC);");			
 			$summary_array = json_decode(get_curl_data($proxy["ip"], $proxy["port"], "summary", $proxy["token"]),true);
 			if(!$summary_array) continue; // if proxy not available !
+			$workers_array = json_decode(get_curl_data($proxy["ip"], $proxy["port"], "workers", $proxy["token"]),true);
+			if(!empty($workers_array["workers"])) write_workers_stats($workers_array["workers"], $proxy["ip"]."_".$proxy["port"]);
 			$val = round($summary_array['hashrate']['total'][2]*1000,2);
 			$date = date('Y-m-d H:i'); 
 			$db->query("INSERT INTO 'proxy_$proxy_address' ('date' ,'value') VALUES('$date', '$val')");
@@ -143,6 +145,8 @@ switch($_POST['cc'])
 				$i++;
 			}
 			$api_data["config_data"]["proxy_infos"] = $proxy_infos;
+		}else if($endpoint == "workers"){
+			$api_data["workers_stats"] = get_workers_stats($proxy_list[$proxy_id]["ip"]."_".$proxy_list[$proxy_id]["port"]);
 		}
 		echo json_encode($api_data);
     break;
@@ -215,6 +219,50 @@ switch($_POST['cc'])
 /******************************************************************/
 /* 						FUNCTIONS								  */
 /******************************************************************/
+function get_workers_stats($proxy){
+	$myFile = "workers_$proxy.json";
+	if (file_exists($myFile)) $data = file_get_contents($myFile); else return false;
+	if(!isJson($data)) return false;
+	$data = json_decode($data ,true);
+	return $data;	
+}
+
+function write_workers_stats($stats_array, $proxy){
+	$myFile = "workers_$proxy.json";
+	if(!file_exists($myFile)){
+		$create = json_encode(array(), JSON_PRETTY_PRINT);
+		file_put_contents($myFile, $create);
+	}
+	$jsondata = file_get_contents($myFile);
+
+	if(!isJson($jsondata)){
+		$create = json_encode(array(), JSON_PRETTY_PRINT);
+		file_put_contents($myFile, $create);
+		$jsondata = json_encode(array());
+	}
+	if( time()-filemtime($myFile) < 3600 && empty($create) ) return false; //write stats only each hour
+	
+	$workers_stats = json_decode($jsondata, true);
+	foreach($stats_array as $k => $v){
+		$id = trim($v[0]);
+		$hashes = $v[12];
+		$key = array_search($id, array_column($workers_stats, 'id'));
+		if($key !== false){
+			$temp_arr = explode(',', $workers_stats[$key]["datas"]);
+			array_push($temp_arr, $hashes);			
+			if(sizeof($temp_arr) >= 24) { unset($temp_arr[0]); $temp_arr = array_values($temp_arr); }		
+			$workers_stats[$key]["datas"] = implode(",", $temp_arr);
+			if ( array_sum($temp_arr) == 0 ){ unset($workers_stats[$key]); $workers_stats = array_values($workers_stats); } // delete old workers
+		}else{
+			$new_stats = array("id"=>$id, "datas"=>$hashes);
+			array_push($workers_stats, $new_stats);
+		}
+		
+	}
+	$jsondata = json_encode($workers_stats, JSON_PRETTY_PRINT);
+	file_put_contents($myFile, $jsondata);
+}
+
 function get_proxy_configs($proxy_ip, $proxy_port, $token){
 	$data = get_curl_data($proxy_ip, $proxy_port, "config", $token);
 	if($data) return json_decode($data, true);
