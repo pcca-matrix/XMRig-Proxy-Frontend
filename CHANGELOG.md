@@ -24,4 +24,7 @@
 - highlight disconnected worker in workers list
 - Fix app may hang if some proxies are not reachable.
 - Fix Graph history day back
-- Fix Not working on IIS7 
+- Fix Not working on IIS7
+
+# v2.0.1
+- Add individual worker graph
