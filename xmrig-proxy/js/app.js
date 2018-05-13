@@ -99,6 +99,7 @@ $$(document).on('page:init', '.page[data-name="workers"]', function (e) {
 	$('.w_sort').on("click", function() {		
 		var si = $$(this).find("i");
 		if(si.hasClass("color-white")){
+			//$('.w_sort').each(function(i, obj) { $(this).find("i").toggleClass("color-white color-blue") });
 			si.toggleClass("color-white color-blue");
 			data_session.workers_set.sort_order = "desc";	
 		}else{
@@ -150,7 +151,8 @@ $$(document).on('page:init', '.page[data-name="ch_pool"]', function (e) {
 			app.request.post('php/get_json.php', { cc:"write_job", proxy:proxy_id, job_datas:job_datas, proxy_pool:config_data.pools[0]}, function (data) {
 				app.notification.create({text: 'Job saved successfully'}).open();
 				$('#submit_pool').hide();
-				get_data();				
+				get_data();
+				//setTimeout(function(){ get_job(); }, 5000);			
 			},"json");
 		});
 	});
@@ -166,7 +168,7 @@ $$(document).on('page:init', '.page[data-name="ch_pool"]', function (e) {
 						$("#act_pool").html( config_data.pools[index].url );
 						app.notification.create({text: 'Pool changed successfully'}).open();
 						get_data();
-						setTimeout(function(){ get_job(); }, 2000);
+						//setTimeout(function(){ get_job(); }, 5000);	ne fonctionne pas	
 					}
 				},"json");
 		}, function(){
@@ -334,7 +336,7 @@ function workers_list(){
 			  '<div class="item-content">'+
 				'<div class="item-inner">'+
 				  '<div class="item-title-row" style="font-size:14px">'+
-					'<div class="item-title">'+item[0].substr(0,5)+'...'+item[0].substr(-5)+'</div>'+
+					'<div class="item-title">' + item[0].substr(0,8) +( item[0].length > 8 ? ".."+item[0].substr(-4) :"") + '</div>'+
 					'<div class="item-after">('+item[2]+') '+item[1]+'</div>'+
 				  '</div>'+
 				  '<div class="item-subtitle" style="font-size:11px;color: rgba(255,255,255,.54)">'+
@@ -349,11 +351,11 @@ function workers_list(){
 						  '<div class="item-cell">24h</div>'+
 						'</div>'+
 						'<div class="item-row" style="font-size:11px;color: rgba(255,255,255,.54)">'+
-						  '<div class="item-cell">'+getReadableHashRateString(item[8]*1000)+"/s"+'</div>'+
-						  '<div class="item-cell">'+getReadableHashRateString(item[9]*1000)+"/s"+'</div>'+
-						  '<div class="item-cell">'+getReadableHashRateString(item[10]*1000)+"/s"+'</div>'+
-						  '<div class="item-cell">'+getReadableHashRateString(item[11]*1000)+"/s"+'</div>'+
-						  '<div class="item-cell">'+getReadableHashRateString(item[12]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell" style="align-self:auto">'+getReadableHashRateString(item[8]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell" style="align-self:auto">'+getReadableHashRateString(item[9]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell" style="align-self:auto">'+getReadableHashRateString(item[10]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell" style="align-self:auto">'+getReadableHashRateString(item[11]*1000)+"/s"+'</div>'+
+						  '<div class="item-cell" style="align-self:auto">'+getReadableHashRateString(item[12]*1000)+"/s"+'<div><span id="'+item[0].replace(".","_")+'" class="inlinesparkline"></span></div></div>'+
 						'</div>'+
 				'</div>'+
 			  '</div>'+
@@ -363,6 +365,31 @@ function workers_list(){
 		});
 		hash_list+="<td>"+getReadableHashRateString(tot_hashes)+"/s</td>";
 		$$('#w_hashrates').html(hash_list);		
+		
+		$.each( data.workers, function( i, item ){
+			var result = $.grep(data.workers_stats, function(e){ return e.id === item[0]  });
+			if(result.length)$('#'+item[0].replace(".","_") ).text(result[0].datas);
+		});
+		
+		$('.inlinesparkline').sparkline(
+			'html',
+			{
+				type: 'line',
+				width: '90%',
+				height: '40',
+				lineColor: '#1F77B4',
+				fillColor: '#1E4A69',
+				spotColor: null,
+				minSpotColor: null,
+				maxSpotColor: null,
+				highlightLineColor: '#1E4A69',
+				spotRadius: 3,
+				drawNormalOnTop: false,
+				chartRangeMin: 0,
+				tooltipFormat: '<b>{{y}}</b>, {{offset:names}}'
+			}
+		);
+		
 	},"json");
 }
 
