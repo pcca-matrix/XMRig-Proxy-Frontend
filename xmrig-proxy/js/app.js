@@ -244,7 +244,7 @@ $$(document).on('page:init', '.page[data-name="history"]', function (e) {
 					if(item_hashes < 0)item_hashes = 0;
 					history_html+='<tr>'+
 						'<td>'+ (item.pool != null ? item.pool.split(':')[0] : "??") +'</td>'+
-						'<td>'+ time(item.start) +'</td>'+
+						'<td>'+ new Date(item.start * 1000).getDate()+ " " +time(item.start) + '</td>'+
 						'<td>'+ secondstotime(item.time_on, true) +'</td>'+
 						'<td>'+ (item_hashes > 0 ? getReadableHashRateString(item_hashes) : "----") +'</td>'+
 						'<td>'+ (item.shares ? item.shares : "") +'</td>'+
