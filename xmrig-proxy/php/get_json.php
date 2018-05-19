@@ -88,7 +88,7 @@ switch($_POST['cc'])
 			//-- Check Jobs
 			if($jobs){
 				$proxy_config_data = json_decode(get_curl_data($proxy["ip"], $proxy["port"], "config", $proxy["token"]), true);
-				if(!$proxy_config_data) continue;
+				if(!$proxy_config_data || sizeof($proxy_config_data["pools"]) <= 1) continue;
 				$key = array_search($proxy_address, array_column($jobs, 'proxy'));			
 				if($key !== false){	
 					//-- Loop Time
