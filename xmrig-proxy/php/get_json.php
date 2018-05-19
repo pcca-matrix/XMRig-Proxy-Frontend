@@ -401,9 +401,8 @@ function get_jobs(){
 	return json_decode($data, true);
 }
 
-function array_move(&$array, $fromIndex, $toIndex) {
-	$out = array_splice($array, $fromIndex, 1);
-	array_splice($array, $toIndex, 0, $out);
+function array_move(&$array,$swap_a,$swap_b){
+   list($array[$swap_a],$array[$swap_b]) = array($array[$swap_b],$array[$swap_a]);
 }
 
 function isJson($string){
