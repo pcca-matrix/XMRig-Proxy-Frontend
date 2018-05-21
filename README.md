@@ -68,7 +68,7 @@ Automatic switching pool to mine the most profitable coin
 
 Add and remove pool from app
 
-
+[Cryptonote Mining Pools](http://hashing.mine.nu)
 
 * XMR: `44ZD1s12j8M6upWXGUS1R2YzXKiKpVmTzYKbrLYSp6pDWvW7C4ALfQ2VNyg6pt2tvA94Tu5kbcDLcLbTvjJBYk6zLFYmWM3`
 * BTC: `1F2UpGsQETpyCCnMEBLFc5whDFAhgXJVU1`
